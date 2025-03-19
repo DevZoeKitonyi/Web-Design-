@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Responsive Layout</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles with CSS Variables for theming */
+        :root {
+            /* Light theme (default) */
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --accent-color: #f97316;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-light: #f8fafc;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-muted: #f1f5f9;
+            --card-bg: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-color: #e2e8f0;
+            --radius: 0.5rem;
+            --transition: all 0.3s ease;
+        }
+
+        /* Dark theme */
+        .dark-mode {
+            --primary-color: #818cf8;
+            --primary-dark: #6366f1;
+            --primary-light: #c7d2fe;
+            --accent-color: #fb923c;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-light: #f8fafc;
+            --bg-primary: #1e293b;
+            --bg-secondary: #0f172a;
+            --bg-muted: #334155;
+            --card-bg: #1e293b;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+            --border-color: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        h1, h2, h3 {
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style-position: inside;
+            margin-bottom: 1rem;
+        }
+
+        section {
+            padding: 5rem 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-accent {
+            background-color: var(--accent-color);
+        }
+
+        .btn-accent:hover {
+            background-color: #ea580c;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .animate {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .animate-delay-1 {
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+
+        .animate-delay-2 {
+            animation-delay: 0.4s;
+            opacity: 0;
+        }
+
+        .animate-delay-3 {
+            animation-delay: 0.6s;
+            opacity: 0;
+        }
+
+        /* Header and Navigation */
+        .header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+        }
+
+        .desktop-nav {
+            display: none;
+        }
+
+        .nav-link {
+            margin-left: 1.5rem;
+            transition: var(--transition);
+            position: relative;
+            font-weight: 500;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--text-light);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle, .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 0.5rem;
+        }
+
+        .menu-toggle:hover, .theme-toggle:hover {
+            transform: rotate(10deg);
+        }
+
+        .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.3s ease;
+            opacity: 0;
+            margin-top: 1rem;
+        }
+
+        .mobile-nav.active {
+            max-height: 300px;
+            opacity: 1;
+        }
+
+        .mobile-nav .nav-link {
+            margin: 0.5rem 0;
+            padding: 0.5rem 0;
+            display: block;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-color: var(--bg-secondary);
+            text-align: center;
+            padding: 6rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-light) 0%, transparent 50%);
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            font-size: 1.125rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Features Section - Grid Layout */
+        .features {
+            background-color: var(--bg-primary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Content Section - Flexbox Layout */
+        .content {
+            background-color: var(--bg-secondary);
+        }
+
+        .content-flex {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .content-image {
+            flex: 1;
+        }
+
+        .image-placeholder {
+            background-color: var(--primary-light);
+            height: 300px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            font-weight: 500;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), transparent);
+            opacity: 0.7;
+        }
+
+        .image-placeholder span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .content-text {
+            flex: 1;
+        }
+
+        .content-text ul {
+            list-style-type: none;
+        }
+
+        .content-text li {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .content-text li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-right: 0.75rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            background-color: var(--bg-primary);
+        }
+
+        .testimonials-container {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .testimonial {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+
+        .testimonial:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .testimonial-image {
+            display: flex;
+            justify-content: center;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), transparent);
+            opacity: 0.7;
+        }
+
+        .avatar span {
+            position: relative;
+            z-index: 1;
+            font-weight: 500;
+        }
+
+        .testimonial-content {
+            flex: 1;
+            text-align: center;
+        }
+
+        blockquote {
+            font-style: italic;
+            margin-bottom: 1rem;
+            position: relative;
+            padding: 0 1.5rem;
+        }
+
+        blockquote::before, blockquote::after {
+            content: '\201C';
+            font-size: 2rem;
+            position: absolute;
+            top: -0.5rem;
+            left: 0;
+            color: var(--primary-color);
+            opacity: 0.5;
+        }
+
+        blockquote::after {
+            content: '\201D';
+            left: auto;
+            right: 0;
+        }
+
+        .author {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Call to Action */
+        .cta {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            text-align: center;
+            padding: 4rem 1rem;
+        }
+
+        .cta h2 {
+            color: var(--text-light);
+        }
+
+        .cta h2::after {
+            background-color: var(--text-light);
+        }
+
+        .cta p {
+            color: var(--text-light);
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .cta .btn {
+            background-color: var(--text-light);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .cta .btn:hover {
+            background-color: var(--bg-primary);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 4rem 0 1.5rem;
+            margin-top: auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 1.25rem;
+            font-size: 1.125rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 1.5px;
+        }
+
+        .footer-column a {
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .footer-column a:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 0.75rem;
+        }
+
+        address {
+            font-style: normal;
+            color: var(--text-secondary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--bg-muted);
+            color: var(--text-primary);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 99;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-5px);
+        }
+
+        /* Media Queries */
+        /* Tablet (768px and up) */
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 3.5rem;
+            }
+            
+            .desktop-nav {
+                display: flex;
+            }
+            
+            .menu-toggle {
+                display: none;
+            }
+            
+            .mobile-nav {
+                display: none;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .content-flex {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .testimonial {
+                flex-direction: row;
+                text-align: left;
+            }
+            
+            .testimonial.reverse {
+                flex-direction: row-reverse;
+            }
+            
+            .testimonial-image {
+                width: 30%;
+            }
+            
+            .testimonial-content {
+                width: 70%;
+                text-align: left;
+            }
+            
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-buttons {
+                flex-direction: row;
+            }
+        }
+
+        /* Desktop (1024px and up) */
+        @media (min-width: 1024px) {
+            h1 {
+                font-size: 4rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .footer-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .testimonial-image {
+                width: 20%;
+            }
+            
+            .testimonial-content {
+                width: 80%;
+            }
+        }
+
+        /* Accessibility focus styles */
+        a:focus, button:focus {
+            outline: 3px solid var(--primary-light);
+            outline-offset: 3px;
+        }
+
+        /* Skip to content link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.3s;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
+    <!-- Navigation Bar -->
+    <header class="header">
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <i class="fas fa-layer-group"></i>
+                    ResponsiveDesign
+                </div>
+                
+                <div class="nav-actions">
+                    <!-- Theme Toggle Button -->
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    
+                    <!-- Desktop Navigation -->
+                    <nav class="desktop-nav">
+                        <a href="#" class="nav-link">Home</a>
+                        <a href="#" class="nav-link">About</a>
+                        <a href="#" class="nav-link">Services</a>
+                        <a href="#" class="nav-link">Portfolio</a>
+                        <a href="#" class="nav-link">Contact</a>
+                    </nav>
+                </div>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <nav class="mobile-nav" id="mobileNav">
+                <a href="#" class="nav-link">Home</a>
+                <a href="#" class="nav-link">About</a>
+                <a href="#" class="nav-link">Services</a>
+                <a href="#" class="nav-link">Portfolio</a>
+                <a href="#" class="nav-link">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="main-content">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="animate">Responsive Web Design</h1>
+                <p class="animate animate-delay-1">Using Flexbox and Grid for modern, responsive layouts that work on any device.</p>
+                <div class="hero-buttons animate animate-delay-2">
+                    <a href="#" class="btn">Get Started</a>
+                    <a href="#" class="btn btn-outline">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section - Using CSS Grid -->
+    <section class="features">
+        <div class="container">
+            <h2>Our Features</h2>
+            
+            <!-- Grid Layout -->
+            <div class="features-grid">
+                <!-- Card 1 -->
+                <div class="card animate">
+                    <div class="card-icon">
+                        <i class="fas fa-th"></i>
+                    </div>
+                    <h3>Flexbox Layout</h3>
+                    <p>Flexbox provides a more efficient way to lay out, align and distribute space among items in a container, even when their size is unknown or dynamic.</p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="card animate animate-delay-1">
+                    <div class="card-icon">
+                        <i class="fas fa-table-cells"></i>
+                    </div>
+                    <h3>CSS Grid</h3>
+                    <p>CSS Grid Layout is a two-dimensional layout system designed for user interface design, offering precise control over rows and columns.</p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="card animate animate-delay-2">
+                    <div class="card-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Media Queries</h3>
+                    <p>Media queries allow you to apply CSS styles depending on device characteristics, creating truly responsive designs.</p>
+                </div>
+                
+                <!-- Card 4 -->
+                <div class="card animate">
+                    <div class="card-icon">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <h3>Responsive Images</h3>
+                    <p>Images that work well on devices with widely differing screen sizes, resolutions, and other characteristics for optimal performance.</p>
+                </div>
+                
+                <!-- Card 5 -->
+                <div class="card animate animate-delay-1">
+                    <div class="card-icon">
+                        <i class="fas fa-tablet-alt"></i>
+                    </div>
+                    <h3>Mobile First</h3>
+                    <p>Design for mobile devices first, then progressively enhance for larger screens to ensure the best experience on all devices.</p>
+                </div>
+                
+                <!-- Card 6 -->
+                <div class="card animate animate-delay-2">
+                    <div class="card-icon">
+                        <i class="fas fa-universal-access"></i>
+                    </div>
+                    <h3>Accessibility</h3>
+                    <p>Ensuring your responsive design is accessible to all users, including those with disabilities, for an inclusive web experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section - Using Flexbox -->
+    <section class="content">
+        <div class="container">
+            <h2>Our Approach</h2>
+            
+            
+                
+                <div class="content-text animate" data-animation="slideInRight">
+                    <h3>Modern Web Development</h3>
+                    <p>
+                        Our approach combines the best of modern CSS techniques to create layouts that are both visually appealing and functionally responsive.
+                    </p>
+                    <p>
+                        By leveraging Flexbox for one-dimensional layouts and Grid for two-dimensional layouts, we create interfaces that adapt seamlessly to any screen size.
+                    </p>
+                    <ul>
+                        <li>Mobile-first responsive design</li>
+                        <li>Optimized performance across devices</li>
+                        <li>Accessible and user-friendly interfaces</li>
+                        <li>Clean, maintainable CSS architecture</li>
+                        <li>Cross-browser compatibility</li>
+                        <li>Fast loading times and optimized assets</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials - Alternating Flexbox Layout -->
+    <section class="testimonials">
+        <div class="container">
+            <h2>What Our Clients Say</h2>
+            
+            <div class="testimonials-container">
+                <!-- Testimonial 1 -->
+                <div class="testimonial animate">
+                    <div class="testimonial-image">
+                        <div class="avatar">
+                            <span>JD</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-content">
+                        <blockquote>
+                            The responsive design implemented by this team has significantly improved our user engagement across all devices. Our mobile conversion rate has increased by 40% since the redesign.
+                        </blockquote>
+                        <p class="author">- Jane Doe, CEO at TechCorp</p>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial reverse animate animate-delay-1">
+                    <div class="testimonial-image">
+                        <div class="avatar">
+                            <span>JS</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-content">
+                        <blockquote>
+                            Their expertise in CSS Grid and Flexbox created a layout that perfectly adapts to any screen size. The attention to detail and focus on accessibility has made our website stand out from competitors.
+                        </blockquote>
+                        <p class="author">- John Smith, Marketing Director at WebSolutions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to Get Started?</h2>
+            <p>
+                Let us help you create a responsive, modern website that looks great on all devices and provides an exceptional user experience.
+            </p>
+            <a href="#" class="btn">Contact Us Today</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>About Us</h3>
+                    <p>
+                        We specialize in creating responsive, accessible web designs using modern CSS techniques that work across all devices and browsers.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">Portfolio</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Tutorials</a></li>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <address>
+                        <p>briankitonyi@gmail.com</p>
+                        <p>+254 743 884 164</p>
+                    </address>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 ResponsiveDesign. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to top button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Mobile Menu Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileNav = document.getElementById('mobileNav');
+            
+            menuToggle.addEventListener('click', function() {
+                mobileNav.classList.toggle('active');
+                
+                // Change icon based on menu state
+                const icon = menuToggle.querySelector('i');
+                if (mobileNav.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+
+            // Theme Toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.classList.add('dark-mode');
+                themeToggle.querySelector('i').classList.remove('fa-moon');
+                themeToggle.querySelector('i').classList.add('fa-sun');
+            }
+            
+            themeToggle.addEventListener('click', function() {
+                body.classList.toggle('dark-mode');
+                
+                // Change icon based on theme
+                const icon = themeToggle.querySelector('i');
+                if (body.classList.contains('dark-mode')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+
+            // Back to top button
+            const backToTop = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
+            
+            backToTop.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Animation on scroll
+            const animateElements = document.querySelectorAll('.animate');
+            
+            function checkIfInView() {
+                animateElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 50) {
+                        element.style.animationPlayState = 'running';
+                    }
+                });
+            }
+            
+            // Initial check
+            checkIfInView();
+            
+            // Check on scroll
+            window.addEventListener('scroll', checkIfInView);
+        });
+    </script>
+</body>
+</html>
